@@ -34,6 +34,11 @@ class Comment
     private ?string $email;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $photoFilename;
+
+    /**
      * @ORM\Column(type="datetime_immutable")
      */
     private ?\DateTimeImmutable $createdAt;
@@ -106,6 +111,18 @@ class Comment
     public function setConference(?Conference $conference): self
     {
         $this->conference = $conference;
+
+        return $this;
+    }
+
+    public function getPhotoFilename(): ?string
+    {
+        return $this->photoFilename;
+    }
+
+    public function setPhotoFilename(?string $photoFilename): self
+    {
+        $this->photoFilename = $photoFilename;
 
         return $this;
     }
