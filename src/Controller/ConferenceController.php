@@ -17,4 +17,5 @@ class ConferenceController extends AbstractController
             'controller_name' => 'ConferenceController',
         ]);
     }
+
 }
