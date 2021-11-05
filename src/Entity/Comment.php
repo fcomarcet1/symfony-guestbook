@@ -38,6 +38,13 @@ class Comment
      */
     private ?\DateTimeImmutable $createdAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Conference $conference;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +94,18 @@ class Comment
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getConference(): ?Conference
+    {
+        return $this->conference;
+    }
+
+    public function setConference(?Conference $conference): self
+    {
+        $this->conference = $conference;
 
         return $this;
     }
