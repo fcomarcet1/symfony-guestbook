@@ -136,10 +136,6 @@ This is an example of how to list things you need to use the software and how to
   #PGPASSWORD=main
   #DATABASE_URL=postgres://main:main@127.0.0.1:32781/main?sslmode=disable&charset=utf8  
   ```
-* Check the database connection
-  ```sh
-  $ symfony run bin/console doctrine:query:sql "SELECT 1"
-  ```
 
 
 ### Prerequisites
