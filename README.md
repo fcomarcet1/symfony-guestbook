@@ -103,14 +103,8 @@ Use the `BLANK_README.md` to get started.
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [Next.js](https://nextjs.org/)
-* [React.js](https://reactjs.org/)
-* [Vue.js](https://vuejs.org/)
-* [Angular](https://angular.io/)
-* [Svelte](https://svelte.dev/)
-* [Laravel](https://laravel.com)
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
+* [Symfony 5](https://symfony.com/)
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -122,12 +116,37 @@ This section should list any major frameworks/libraries used to bootstrap your p
 This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
+### Dev Commands
+
+This is an example of how to list things you need to use the software and how to install them.
+* Accessing the Local Postgres Database
+  ```sh
+  $ symfony run psql
+  ```
+* Check all environment variables exposed by symfony.
+  NOTE: You can get the connection string(DATABASE_URL) with this cmd
+  ```sh
+  $ symfony var:export 
+  
+  #PGHOST=127.0.0.1
+  #PGPORT=32781
+  #PGDATABASE=main
+  #PGUSER=main
+  #PGPASSWORD=main
+  #DATABASE_URL=postgres://main:main@127.0.0.1:32781/main?sslmode=disable&charset=utf8  
+  ```
+* Check the database connection
+  ```sh
+  $ symfony run bin/console doctrine:query:sql "SELECT 1"
+  ```
+
+
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+* Composer
   ```sh
-  npm install npm@latest -g
+  composer install
   ```
 
 ### Installation
