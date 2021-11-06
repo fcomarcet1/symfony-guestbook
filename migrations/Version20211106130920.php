@@ -23,10 +23,10 @@ final class Version20211106130920 extends AbstractMigration
 
         $this->addSql('
             CREATE TABLE IF NOT EXISTS sessions (
-                session_id VARCHAR(128) NOT NULL PRIMARY KEY,
-                session_data BYTEA NOT NULL,
-                session_lifetime INTEGER NOT NULL,
-                session_time INTEGER NOT NULL
+                sess_id VARCHAR(128) NOT NULL PRIMARY KEY,
+                sess_data BYTEA NOT NULL,
+                sess_lifetime INTEGER NOT NULL,
+                sess_time INTEGER NOT NULL
             )
         ');
     }
