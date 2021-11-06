@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ConferenceRepository::class)
+ * @ORM\Table(name="conference")
  */
 class Conference
 {
@@ -36,9 +37,10 @@ class Conference
     private ?bool $isInternational;
 
     /**
+     * @var Collection|Comment[]
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="conference", orphanRemoval=true)
      */
-    private ArrayCollection $comments;
+    private Collection $comments;
 
     public function __construct()
     {
