@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=ConferenceRepository::class)
- * @ORM\Table(name="conference")
+ * @ORM\Table(name="conference")*
  */
 class Conference
 {
@@ -41,6 +41,11 @@ class Conference
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="conference", orphanRemoval=true)
      */
     private Collection $comments;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $slug;
 
     public function __construct()
     {
@@ -119,6 +124,18 @@ class Conference
                 $comment->setConference(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

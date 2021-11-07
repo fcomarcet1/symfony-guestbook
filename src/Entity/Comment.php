@@ -51,6 +51,20 @@ class Comment
      */
     private ?Conference $conference;
 
+    /*public function __construct(
+        string $author,
+        string $text,
+        string $email,
+        ?string $photoFilename,
+        Conference $conference
+    ) {
+        $this->author = $author;
+        $this->text = $text;
+        $this->email = $email;
+        $this->photoFilename = $photoFilename;
+        $this->conference = $conference;
+    }*/
+
 
     public function __toString(): string
     {
