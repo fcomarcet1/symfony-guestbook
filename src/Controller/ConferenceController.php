@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\Conference;
 use App\Form\CommentFormType;
+use App\HttpClient\SpamChecker;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -23,11 +25,16 @@ class ConferenceController extends AbstractController
 {
     private Environment $twig;
     private EntityManagerInterface $entityManager;
+    private SpamChecker $spamChecker;
 
-    public function __construct(Environment $twig, EntityManagerInterface $entityManager)
+    public function __construct(
+        Environment $twig,
+        EntityManagerInterface $entityManager,
+        SpamChecker $spamChecker)
     {
         $this->twig = $twig;
         $this->entityManager = $entityManager;
+        $this->spamChecker = $spamChecker;
     }
 
     /**
@@ -49,6 +56,7 @@ class ConferenceController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws \Exception
+     * @throws TransportExceptionInterface
      */
     public function show(
         Request           $request,
@@ -74,9 +82,20 @@ class ConferenceController extends AbstractController
                 $comment->setPhotoFilename($filename);
             }
 
-
-
             $this->entityManager->persist($comment);
+
+            // Check if the comment is a spam
+            $context = [
+                'user_ip' => $request->getClientIp(),
+                'user_agent' => $request->headers->get('user-agent'),
+                'referrer' => $request->headers->get('referer'),
+                'permalink' => $request->getUri(),
+            ];
+           if ($this->spamChecker->getSpamScore($comment, $context) === 2){
+               throw new \RuntimeException('Blatant spam, go away!');
+           }
+
+
             $this->entityManager->flush();
 
             return $this->redirectToRoute('conference', [
