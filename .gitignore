@@ -3,7 +3,9 @@
 /.idea/
 ###< vscode, phpstorm ###
 
-
+###> images ###
+/public/uploads
+###< images ###
 
 ###> symfony/framework-bundle ###
 /.env.local

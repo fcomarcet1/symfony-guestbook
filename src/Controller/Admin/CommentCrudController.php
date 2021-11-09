@@ -51,7 +51,7 @@ class CommentCrudController extends AbstractCrudController
             ->onlyOnIndex()
         ;
 
-        $createdAt = DateTimeField::new('createdAt')->setFormTypeOptions([
+       /* $createdAt = DateTimeField::new('createdAt')->setFormTypeOptions([
             'html5' => true,
             'years' => range(date('Y'), date('Y') + 5),
             'widget' => 'single_text',
@@ -60,6 +60,6 @@ class CommentCrudController extends AbstractCrudController
             yield $createdAt->setFormTypeOption('disabled', true);
         } else {
             yield $createdAt;
-        }
+        }*/
     }
 }
