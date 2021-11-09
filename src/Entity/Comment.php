@@ -23,17 +23,17 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $author;
+    private string $author;
 
     /**
      * @ORM\Column(type="text")
      */
-    private ?string $text;
+    private string $text;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -49,7 +49,7 @@ class Comment
      * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Conference $conference;
+    private Conference $conference;
 
     /*public function __construct(
         string $author,
@@ -113,7 +113,7 @@ class Comment
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

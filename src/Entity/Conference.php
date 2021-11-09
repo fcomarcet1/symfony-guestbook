@@ -27,17 +27,17 @@ class Conference
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $city;
+    private string $city;
 
     /**
      * @ORM\Column(type="string", length=4)
      */
-    private ?string $year;
+    private string $year;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isInternational;
+    private bool $isInternational;
 
     /**
      * @var Collection|Comment[]
