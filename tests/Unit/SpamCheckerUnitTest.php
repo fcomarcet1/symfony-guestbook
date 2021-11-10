@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests;
+namespace App\Tests\Unit;
 
 use App\Entity\Comment;
 use App\HttpClient\SpamChecker;
@@ -13,9 +13,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 class SpamCheckerUnitTest extends TestCase
 {
     // Happy path
-    /**
-     * @dataProvider getComments
-     */
+    /** @dataProvider getComments */
     public function testSpamScore(
         int $expectedScore,
         ResponseInterface $response,
@@ -31,6 +29,7 @@ class SpamCheckerUnitTest extends TestCase
     }
 
 
+    // bad path
     public function testSpamScoreWithInvalidRequest(): void
     {
         $comment = new Comment('lerele comment');
@@ -56,6 +55,8 @@ class SpamCheckerUnitTest extends TestCase
 
         $checker->getSpamScore($comment, $context);
     }
+
+
 
     public function getComments(): iterable
     {
