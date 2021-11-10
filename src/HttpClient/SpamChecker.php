@@ -47,7 +47,7 @@ class SpamChecker
                 'comment_author_email' => $comment->getEmail(),
                 'comment_content' => $comment->getText(),
                 'comment_date_gmt' => $comment->getCreatedAt()->format('c'),
-                'blog_lang' => 'en',
+                'blog_lang' => 'es',
                 'blog_charset' => 'UTF-8',
                 'is_test' => true,
             ]),

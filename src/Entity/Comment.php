@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -25,32 +23,27 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Assert\Length(min=3, max=255)
      */
-    private string $author;
+    // TODO: si añado el tipo falla el testSpamScoreWithInvalidRequest ????
+    private $author;
 
     /**
      * @ORM\Column(type="text")
      * @Assert\NotBlank
      */
-    private string $text;
+    private $text;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank
      * @Assert\Email
+     * @Assert\NotBlank
      */
-    private string $email;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $photoFilename;
+    private $email;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
-    private ?\DateTimeImmutable $createdAt;
+    private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
@@ -58,26 +51,15 @@ class Comment
      */
     private Conference $conference;
 
-    /*public function __construct(
-        string $author,
-        string $text,
-        string $email,
-        ?string $photoFilename,
-        Conference $conference
-    ) {
-        $this->author = $author;
-        $this->text = $text;
-        $this->email = $email;
-        $this->photoFilename = $photoFilename;
-        $this->conference = $conference;
-    }*/
-
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private ?string $photoFilename;
 
     public function __toString(): string
     {
         return (string) $this->getEmail();
     }
-
 
     public function getId(): ?int
     {
@@ -120,7 +102,7 @@ class Comment
         return $this;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -137,7 +119,7 @@ class Comment
      */
     public function setCreatedAtValue()
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = new \DateTimeImmutable('now');
     }
 
     public function getConference(): ?Conference
