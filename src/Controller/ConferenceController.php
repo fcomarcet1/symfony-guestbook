@@ -91,7 +91,17 @@ class ConferenceController extends AbstractController
                 'referrer' => $request->headers->get('referer'),
                 'permalink' => $request->getUri(),
             ];
-           if ($this->spamChecker->getSpamScore($comment, $context) === 2){
+
+            /**
+             * The getSpamScore() method returns 3 values depending on the API call response:
+                2: if the comment is a "blatant spam";
+                1: if the comment might be spam;
+                0: if the comment is not spam (ham).
+             */
+           $commentScore = $this->spamChecker->getSpamScore($comment, $context);
+           /*dump($commentScore);
+           die();*/
+           if ($commentScore === 2){
                throw new \RuntimeException('Blatant spam, go away!');
            }
 
