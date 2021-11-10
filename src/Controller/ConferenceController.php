@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Conference;
 use App\Form\CommentFormType;
 use App\HttpClient\SpamChecker;
+use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Twig\Environment;
@@ -26,15 +28,18 @@ class ConferenceController extends AbstractController
     private Environment $twig;
     private EntityManagerInterface $entityManager;
     private SpamChecker $spamChecker;
+    private MessageBusInterface $bus;
 
     public function __construct(
-        Environment $twig,
+        Environment            $twig,
         EntityManagerInterface $entityManager,
-        SpamChecker $spamChecker)
+        SpamChecker            $spamChecker,
+        MessageBusInterface    $bus)
     {
         $this->twig = $twig;
         $this->entityManager = $entityManager;
         $this->spamChecker = $spamChecker;
+        $this->bus = $bus;
     }
 
     /**
@@ -62,7 +67,7 @@ class ConferenceController extends AbstractController
         Request           $request,
         Conference        $conference,
         CommentRepository $commentRepository,
-        string $photoDir
+        string            $photoDir
     ): Response
     {
         $comment = new Comment();
@@ -73,7 +78,7 @@ class ConferenceController extends AbstractController
             $comment->setConference($conference);
             // upload photo
             if ($photo = $form['photo']->getData()) {
-                $filename = bin2hex(random_bytes(6)).'.'.$photo->guessExtension();
+                $filename = bin2hex(random_bytes(6)) . '.' . $photo->guessExtension();
                 try {
                     $photo->move($photoDir, $filename);
                 } catch (FileException $e) {
@@ -83,6 +88,7 @@ class ConferenceController extends AbstractController
             }
 
             $this->entityManager->persist($comment);
+            $this->entityManager->flush();
 
             // Check if the comment is a spam
             $context = [
@@ -94,23 +100,23 @@ class ConferenceController extends AbstractController
 
             /**
              * The getSpamScore() method returns 3 values depending on the API call response:
-                2: if the comment is a "blatant spam";
-                1: if the comment might be spam;
-                0: if the comment is not spam (ham).
+             * 2: if the comment is a "blatant spam";
+             * 1: if the comment might be spam;
+             * 0: if the comment is not spam (ham).
              */
-           $commentScore = $this->spamChecker->getSpamScore($comment, $context);
-           /*dump($commentScore);
-           die();*/
-           if ($commentScore === 2){
-               throw new \RuntimeException('Blatant spam, go away!');
-           }
+            /*$commentScore = $this->spamChecker->getSpamScore($comment, $context);
+            if ($commentScore === 2){
+                throw new \RuntimeException('Blatant spam, go away!');
+            }*/
 
-
-            $this->entityManager->flush();
+            // send message to the bus and the handler will call the API
+            $this->bus->dispatch(new CommentMessage($comment->getId(), $context));
 
             return $this->redirectToRoute('conference', [
                 'slug' => $conference->getSlug()
             ]);
+
+
         }
 
 
