@@ -27,18 +27,15 @@ class ConferenceController extends AbstractController
 {
     private Environment $twig;
     private EntityManagerInterface $entityManager;
-    private SpamChecker $spamChecker;
     private MessageBusInterface $bus;
 
     public function __construct(
         Environment            $twig,
         EntityManagerInterface $entityManager,
-        SpamChecker            $spamChecker,
         MessageBusInterface    $bus)
     {
         $this->twig = $twig;
         $this->entityManager = $entityManager;
-        $this->spamChecker = $spamChecker;
         $this->bus = $bus;
     }
 
@@ -61,7 +58,6 @@ class ConferenceController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws \Exception
-     * @throws TransportExceptionInterface
      */
     public function show(
         Request           $request,
@@ -115,10 +111,7 @@ class ConferenceController extends AbstractController
             return $this->redirectToRoute('conference', [
                 'slug' => $conference->getSlug()
             ]);
-
-
         }
-
 
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $commentRepository->getCommentPaginator($conference, $offset);
