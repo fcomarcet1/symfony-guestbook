@@ -53,7 +53,7 @@ class Conference
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private string $slug;
+    private $slug;
 
     public function __construct()
     {
