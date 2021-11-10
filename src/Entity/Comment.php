@@ -18,7 +18,7 @@ class Comment
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private ?int $id;
+    private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -49,12 +49,12 @@ class Comment
      * @ORM\ManyToOne(targetEntity=Conference::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private Conference $conference;
+    private  $conference;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $photoFilename;
+    private $photoFilename;
 
     /**
      * @ORM\Column(type="string", length=255, options={"default": "submitted"})
